@@ -32,6 +32,23 @@ type router struct {
 	// routers map of handler with method and path.
 	// key1-method, key2-path
 	routers map[string]map[string]Handler
+
+	// ifNotMatch handler of not match, default is http.NotFound
+	ifNotMatch Handler
+}
+
+func newRouter() *router {
+	r := &router{
+		routers: make(map[string]map[string]Handler),
+	}
+	for _, method := range RouterMethods {
+		r.routers[method] = make(map[string]Handler)
+	}
+	return r
+}
+
+func (r *router) SetIfNotMatch(handler Handler) {
+	r.ifNotMatch = handler
 }
 
 func (r *router) Get(path string, handler Handler) {
@@ -77,6 +94,9 @@ func (r *router) Match(method, path string) Handler {
 		if handle, ok := v1[path]; ok {
 			return handle
 		}
+	}
+	if r.ifNotMatch != nil {
+		return r.ifNotMatch
 	}
 	return http.NotFound
 }

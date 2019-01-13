@@ -33,15 +33,11 @@ type Router interface {
 	// Match return the handler by method and path.if not match
 	// any handler, NotFound will be return.
 	Match(method, path string) Handler
+	// SetIfNotMatch set the handler of not match,default is http.NotFound
+	SetIfNotMatch(Handler)
 }
 
 // NewRouter return a new router instance.
 func NewRouter() Router {
-	r := &router{
-		routers: make(map[string]map[string]Handler),
-	}
-	for _, method := range RouterMethods {
-		r.routers[method] = make(map[string]Handler)
-	}
-	return r
+	return newRouter()
 }
