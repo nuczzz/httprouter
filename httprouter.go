@@ -32,7 +32,7 @@ type Router interface {
 
 	// Match return the handler by method and path.if not match
 	// any handler, NotFound will be return.
-	Match(method, path string) Handler
+	ServeHTTP(resp http.ResponseWriter, req *http.Request)
 	// SetIfNotMatch set the handler of not match,default is http.NotFound
 	SetIfNotMatch(Handler)
 }

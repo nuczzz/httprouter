@@ -89,7 +89,7 @@ func (r *router) Trace(path string, handler Handler) {
 
 // Match return the handler by method and path.if not match
 // any handler, NotFound will be return.
-func (r *router) Match(method, path string) Handler {
+func (r *router) match(method, path string) Handler {
 	if v1, ok := r.routers[method]; ok {
 		if handle, ok := v1[path]; ok {
 			return handle
@@ -99,4 +99,9 @@ func (r *router) Match(method, path string) Handler {
 		return r.ifNotMatch
 	}
 	return http.NotFound
+}
+
+// ServeHTTP implement http.Handler
+func (r *router) ServeHTTP(resp http.ResponseWriter, req *http.Request) {
+	r.match(req.Method, req.URL.Path)(resp, req)
 }

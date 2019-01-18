@@ -18,7 +18,7 @@ func TestRouter(t *testing.T) {
 	router := newRouter()
 	router.SetIfNotMatch(notMatch)
 	router.Get("/echo", echo)
-	router.Match("GET", "/echo")(nil, nil)
-	router.Match("POST", "/echo")(nil, nil)
-	router.Match("GET", "/not_exist")(nil, nil)
+	router.match("GET", "/echo")(nil, nil)
+	router.match("POST", "/echo")(nil, nil)
+	router.match("GET", "/not_exist")(nil, nil)
 }
