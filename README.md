@@ -24,19 +24,14 @@ type Server struct {
 }
 
 func NewServer() *Server {
-	router := httprouter.NewRouter()
-	router.SetIfNotMatch(notMatch)
-	router.Get("/echo", echo)
-	return &Server{Router: router}
-}
-
-func (s *Server) ServeHTTP(resp http.ResponseWriter, req *http.Request) {
-	s.Match(req.Method, req.URL.Path)(resp, req)
+	server := &Server{Router: httprouter.NewRouter()}
+	server.SetIfNotMatch(notMatch)
+	server.Get("/echo", echo)
+	return server
 }
 
 func main() {
 	server := NewServer()
 	fmt.Println(http.ListenAndServe(":8080", server))
 }
-
 ```
